@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKamarKos extends Migration
+class CreateFasilitiasUmum extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateKamarKos extends Migration
      */
     public function up()
     {
-        Schema::create('kamas_kos', function (Blueprint $table) {
+        Schema::create('fasilitas_umum', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('kos_id')->unsigned();
             $table->string('nama');
-            $table->integer('harga');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateKamarKos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kamas_kos');
+        Schema::dropIfExists('fasilitas_umum');
     }
 }
