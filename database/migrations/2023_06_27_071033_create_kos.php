@@ -17,8 +17,7 @@ class CreateKos extends Migration
             $table->id();
             $table->bigInteger('pemilik_kos_id')->unsigned();
             $table->string('nama');
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->text('embedded_map');
             $table->timestamps();
             $table->foreign('pemilik_kos_id')->references('id')->on('pemilik_kos');
         });
