@@ -63,5 +63,12 @@ Route::group(['prefix' => 'admin'], function (){
         Route::post('/{id}/delete', [\App\Http\Controllers\Admin\KosController::class, 'destroy'])->name('admin.kos.delete');
     });
 
+    Route::group(['prefix' => 'kamar'], function () {
+        Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\KamarController::class, 'index'])->name('admin.kamar');
+        Route::post('/{id}', [\App\Http\Controllers\Admin\KamarController::class, 'patch'])->name('admin.kamar.update');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\KamarController::class, 'destroy'])->name('admin.kamar.delete');
+        Route::get('/{id}/images', [\App\Http\Controllers\Admin\KamarController::class, 'images'])->name('admin.kamar.images');
+    });
+
 
 });

@@ -118,6 +118,13 @@
                         <p>Kos</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.kamar') }}"
+                       class="nav-link">
+                        <i class="fa fa-tags nav-icon" aria-hidden="true"></i>
+                        <p>Kamar</p>
+                    </a>
+                </li>
 {{--                <li class="nav-item">--}}
 {{--                    <a href="{{ route('admin.paket') }}"--}}
 {{--                       class="nav-link">--}}

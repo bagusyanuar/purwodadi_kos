@@ -1,6 +1,9 @@
 @extends('admin.layout')
 
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
+          integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link href="{{ asset('/adminlte/plugins/select2/select2.css') }}" rel="stylesheet">
     <style>
         .select2-selection {
@@ -27,17 +30,31 @@
             display: flex;
             align-items: center;
         }
+
+        #document-dropzone {
+            height: 300px;
+        }
+
+        .dropzone .dz-message {
+            text-align: center;
+            height: 260px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            overflow: scroll;
+        }
     </style>
 @endsection
 
 @section('content')
     <div class="d-flex align-items-center justify-content-between mb-3">
-        <p class="font-weight-bold mb-0" style="font-size: 20px">Halaman Kos</p>
+        <p class="font-weight-bold mb-0" style="font-size: 20px">Halaman Kamar Kos</p>
         <ol class="breadcrumb breadcrumb-transparent mb-0">
             <li class="breadcrumb-item">
                 <a href="{{ route('dashboard') }}">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Kos
+            <li class="breadcrumb-item active" aria-current="page">Kamar Kos
             </li>
         </ol>
     </div>
@@ -55,12 +72,11 @@
                     <thead>
                     <tr>
                         <th width="5%" class="text-center">#</th>
-                        <th>Nama</th>
-                        <th width="15%">Pemilik Kos</th>
-                        <th width="12%">Wilayah</th>
-                        <th width="15%">Fasilitas Umum</th>
-                        <th width="15%">Peraturan</th>
-                        <th width="10%" class="text-center">Action</th>
+                        <th>Nama Kos</th>
+                        <th>Nama Kamar</th>
+                        <th width="12%">Harga (Rp.)</th>
+                        <th width="15%">Fasilitas Kamar</th>
+                        <th width="15%" class="text-center">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -86,47 +102,30 @@
                         <input type="text" class="form-control" id="nama" placeholder="Nama"
                                name="nama">
                     </div>
-                    <div class="form-group w-100 mt-1">
-                        <label for="pemilik_kos">Pemilik Kos</label>
-                        <select class="select2" name="pemilik_kos" id="pemilik_kos" style="width: 100%;">
-                            <option value="">--Pilih Pemilik Kos--</option>
-                            @foreach($pemilik_kos as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group w-100">
-                        <label for="wilayah">Wilayah</label>
-                        <select class="select2" name="wilayah" id="wilayah" style="width: 100%;">
-                            <option value="">--Pilih Wilayah--</option>
-                            @foreach($wilayah as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group w-100">
-                        <label for="fasilitas_umum">Fasilitas Umum</label>
-                        <select class="select2" name="fasilitas_umum[]" id="fasilitas_umum" multiple="multiple"
-                                style="width: 100%;">
-                            @foreach($fasilitas_umum as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group w-100">
-                        <label for="peraturan">Peraturan</label>
-                        <select class="select2" name="peraturan[]" id="peraturan" multiple="multiple"
-                                style="width: 100%;">
-                            @foreach($peraturan as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                     <div class="w-100 mb-1">
-                        <label for="map" class="form-label">Map</label>
-                        <input type="text" class="form-control" id="map" placeholder="map"
-                               name="map">
+                        <label for="harga" class="form-label">Harga (Rp.)</label>
+                        <input type="number" class="form-control" id="harga" placeholder="Harga"
+                               name="harga">
                     </div>
+                    <div class="form-group w-100 mt-1">
+                        <label for="kos">Kos</label>
+                        <select class="select2" name="kos" id="kos" style="width: 100%;">
+                            <option value="">--Pilih Kos--</option>
+                            @foreach($kos as $v)
+                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group w-100">
+                        <label for="fasilitas_kamar">Fasilitas Kamar</label>
+                        <select class="select2" name="fasilitas_kamar[]" id="fasilitas_kamar" multiple="multiple"
+                                style="width: 100%;">
+                            @foreach($fasilitas_kamar as $v)
+                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -153,46 +152,29 @@
                         <input type="text" class="form-control" id="nama-edit" placeholder="Nama"
                                name="nama-edit">
                     </div>
-                    <div class="form-group w-100 mt-1">
-                        <label for="pemilik_kos-edit">Pemilik Kos</label>
-                        <select class="select2" name="pemilik_kos-edit" id="pemilik_kos-edit" style="width: 100%;">
-                            <option value="">--Pilih Pemilik Kos--</option>
-                            @foreach($pemilik_kos as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group w-100">
-                        <label for="wilayah-edit">Wilayah</label>
-                        <select class="select2" name="wilayah-edit" id="wilayah-edit" style="width: 100%;">
-                            <option value="">--Pilih Wilayah--</option>
-                            @foreach($wilayah as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group w-100">
-                        <label for="fasilitas_umum-edit">Fasilitas Umum</label>
-                        <select class="select2" name="fasilitas_umum-edit[]" id="fasilitas_umum-edit" multiple="multiple"
-                                style="width: 100%;">
-                            @foreach($fasilitas_umum as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group w-100">
-                        <label for="peraturan-edit">Peraturan</label>
-                        <select class="select2" name="peraturan-edit[]" id="peraturan-edit" multiple="multiple"
-                                style="width: 100%;">
-                            @foreach($peraturan as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                     <div class="w-100 mb-1">
-                        <label for="map-edit" class="form-label">Map</label>
-                        <input type="text" class="form-control" id="map-edit" placeholder="map"
-                               name="map-edit">
+                        <label for="harga-edit" class="form-label">Harga (Rp.)</label>
+                        <input type="number" class="form-control" id="harga-edit" placeholder="Harga"
+                               name="harga-edit">
+                    </div>
+                    <div class="form-group w-100 mt-1">
+                        <label for="kos-edit">Kos</label>
+                        <select class="select2" name="kos-edit" id="kos-edit" style="width: 100%;">
+                            <option value="">--Pilih Kos--</option>
+                            @foreach($kos as $v)
+                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group w-100">
+                        <label for="fasilitas_kamar-edit">Fasilitas Kamar</label>
+                        <select class="select2" name="fasilitas_kamar-edit[]" id="fasilitas_kamar-edit"
+                                multiple="multiple"
+                                style="width: 100%;">
+                            @foreach($fasilitas_kamar as $v)
+                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -203,9 +185,50 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalImages" tabindex="-1" role="dialog" aria-labelledby="modalImagesLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalImagesLabel">Gambar Kamar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="form-input" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" id="id-image" name="id" value="">
+                    <div class="modal-body">
+                        <div id="panel-images">
+                            <div style="min-height: 200px;" class="d-flex justify-content-center align-items-center">
+                                <p class="font-weight-bold">Gambar Tidak Tersedia</p>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="file" name="file[]" multiple>
+                                <label class="custom-file-label" for="file">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button id="btn-upload" type="button" class="btn btn-primary"><i class="fa fa-save mr-2"></i>Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"
+            integrity="sha512-U2WE1ktpMTuRBPoCFDzomoIorbOyUv0sP8B+INA3EzNAhehbzED1rOJg6bCqPf/Tuposxb5ja/MAUnC8THSbLQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('/adminlte/plugins/select2/select2.js') }}"></script>
     <script src="{{ asset('/adminlte/plugins/select2/select2.full.js') }}"></script>
     <script src="{{ asset('/js/helper.js') }}"></script>
@@ -214,29 +237,23 @@
 
         function clear() {
             $('#nama').val('');
-            $('#pemilik_kos').select2().val('').trigger('change');
-            $('#wilayah').select2().val('').trigger('change');
-            $('#fasilitas_umum').select2().val('').trigger('change');
-            $('#peraturan').select2().val('').trigger('change');
-            $('#map').val('');
+            $('#kos').select2().val('').trigger('change');
+            $('#fasilitas_kamar').select2().val('').trigger('change');
+            $('#harga').val('');
             $('#nama-edit').val('');
-            $('#pemilik_kos-edit').select2().val('').trigger('change');
-            $('#wilayah-edit').select2().val('').trigger('change');
-            $('#fasilitas_umum-edit').select2().val('').trigger('change');
-            $('#peraturan-edit').select2().val('').trigger('change');
-            $('#map-edit').val('');
+            $('#kos-edit').select2().val('').trigger('change');
+            $('#fasilitas_kamar-edit').select2().val('').trigger('change');
+            $('#harga-edit').val('');
             $('#id').val('');
         }
 
         function store() {
-            let url = '{{ route('admin.kos') }}';
+            let url = '{{ route('admin.kamar') }}';
             let data = {
                 nama: $('#nama').val(),
-                pemilik_kos: $('#pemilik_kos').val(),
-                wilayah: $('#wilayah').val(),
-                map: $('#map').val(),
-                fasilitas_umum: $('#fasilitas_umum').val(),
-                peraturan: $('#peraturan').val(),
+                kos: $('#kos').val(),
+                harga: $('#harga').val(),
+                fasilitas_kamar: $('#fasilitas_kamar').val(),
             };
             AjaxPost(url, data, function () {
                 clear();
@@ -247,14 +264,12 @@
 
         function patch() {
             let id = $('#id').val();
-            let url = '{{ route('admin.kos') }}' + '/' + id;
+            let url = '{{ route('admin.kamar') }}' + '/' + id;
             let data = {
                 nama: $('#nama-edit').val(),
-                pemilik_kos: $('#pemilik_kos-edit').val(),
-                wilayah: $('#wilayah-edit').val(),
-                map: $('#map-edit').val(),
-                fasilitas_umum: $('#fasilitas_umum-edit').val(),
-                peraturan: $('#peraturan-edit').val(),
+                kos: $('#kos-edit').val(),
+                harga: $('#harga-edit').val(),
+                fasilitas_kamar: $('#fasilitas_kamar-edit').val(),
             };
             AjaxPost(url, data, function () {
                 clear();
@@ -265,7 +280,7 @@
         }
 
         function destroy(id) {
-            let url = '{{ route('admin.kos') }}' + '/' + id + '/delete';
+            let url = '{{ route('admin.kamar') }}' + '/' + id + '/delete';
             AjaxPost(url, {}, function () {
                 clear();
                 SuccessAlert('Berhasil!', 'Berhasil menghapus data...');
@@ -282,18 +297,13 @@
                 e.preventDefault();
                 let id = this.dataset.id;
                 let nama = this.dataset.nama;
-                let pemilik = this.dataset.pemilik;
-                let wilayah = this.dataset.wilayah;
-                let map = this.dataset.map;
-                let peraturan = JSON.parse(this.dataset.peraturan);
+                let harga = this.dataset.harga;
+                let kos = this.dataset.kos;
                 let fasilitas = JSON.parse(this.dataset.fasilitas);
-                console.log(fasilitas);
                 $('#nama-edit').val(nama);
-                $('#map-edit').val(map);
-                $('#pemilik_kos-edit').select2().val(pemilik).trigger('change');
-                $('#wilayah-edit').select2().val(wilayah).trigger('change');
-                $('#fasilitas_umum-edit').select2().val(fasilitas).trigger('change');
-                $('#peraturan-edit').select2().val(peraturan).trigger('change');
+                $('#harga-edit').val(harga);
+                $('#kos-edit').select2().val(kos).trigger('change');
+                $('#fasilitas_kamar-edit').select2().val(fasilitas).trigger('change');
                 $('#id').val(id);
                 $('#modalEdit').modal('show');
             })
@@ -322,30 +332,41 @@
             })
         }
 
+        function imageEvent() {
+            $('.btn-images').on('click', async function (e) {
+                e.preventDefault();
+                let id = this.dataset.id;
+                $('#id-image').val(id);
+                let url = '{{ route('admin.kamar') }}' + '/' + id + '/images';
+                let response = await $.get(url);
+                console.log(response);
+                $('#modalImages').modal('show');
+            })
+        }
+
+
         $(document).ready(function () {
             $('.select2').select2({
                 width: 'resolve'
             });
-            let url = '{{ route('admin.kos') }}';
+
+            $(".custom-file-input").on("change", function() {
+                var files = Array.from(this.files)
+                var fileName = files.map(f =>{return f.name}).join(", ")
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+            let url = '{{ route('admin.kamar') }}';
             table = DataTableGenerator('#table-data', url, [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+                {data: 'kos.nama'},
                 {data: 'nama'},
-                {data: 'pemilik_kos.nama'},
-                {data: 'wilayah.nama'},
                 {
-                    data: 'fasilitas_umum', render: function (data) {
-                        let value = '';
-                        if (data.length > 0) {
-                            $.each(data, function (k, v) {
-                                value += '<div>- ' + v['nama'] + '</div>';
-                            });
-                            return value;
-                        }
-                        return '<span>-</span>';
+                    data: 'harga', render: function (data) {
+                        return data.toLocaleString('id-ID');
                     }
                 },
                 {
-                    data: 'peraturan', render: function (data) {
+                    data: 'fasilitas_kamar', render: function (data) {
                         let value = '';
                         if (data.length > 0) {
                             $.each(data, function (k, v) {
@@ -358,39 +379,38 @@
                 },
                 {
                     data: null, render: function (data) {
-                        let peraturan = [];
-                        let fasilitas_umum = [];
-                        $.each(data['peraturan'], function (k, v) {
-                            peraturan.push(v['id']);
-                        });
-                        $.each(data['fasilitas_umum'], function (k, v) {
-                            fasilitas_umum.push(v['id']);
+                        let fasilitas_kamar = [];
+                        $.each(data['fasilitas_kamar'], function (k, v) {
+                            fasilitas_kamar.push(v['id']);
                         });
 
-                        let stringPeraturan = JSON.stringify(peraturan);
-                        let stringFasilitasUmum = JSON.stringify(fasilitas_umum);
+                        let stringFasilitasKamar = JSON.stringify(fasilitas_kamar);
                         return '<a href="#" class="btn btn-sm btn-warning btn-edit mr-1" ' +
                             'data-id="' + data['id'] + '" ' +
                             'data-nama="' + data['nama'] + '" ' +
-                            'data-map="' + data['embedded_map'] + '" ' +
-                            'data-peraturan="' + stringPeraturan + '"' +
-                            'data-fasilitas="' + stringFasilitasUmum + '"' +
-                            'data-pemilik="' + data['pemilik_kos']['id'] + '"' +
-                            'data-wilayah="' + data['wilayah']['id'] + '"' +
+                            'data-harga="' + data['harga'] + '" ' +
+                            'data-fasilitas="' + stringFasilitasKamar + '"' +
+                            'data-kos="' + data['kos']['id'] + '"' +
                             '><i class="fa fa-edit f12"></i></a>' +
-                            '<a href="#" class="btn btn-sm btn-danger btn-delete mr-1" data-id="' + data['id'] + '"><i class="fa fa-trash f12"></i></a>';
+                            '<a href="#" class="btn btn-sm btn-danger btn-delete mr-1" data-id="' + data['id'] + '"><i class="fa fa-trash f12"></i></a>' +
+                            '<a href="#" class="btn btn-sm btn-primary btn-images mr-1" data-id="' + data['id'] + '"><i class="fa fa-file-image-o f12"></i></a>';
                     }
                 },
             ], [
                 {
-                    targets: [0, 2],
+                    targets: [0, 4, 5],
                     className: 'text-center'
+                },
+                {
+                    targets: [3],
+                    className: 'text-right'
                 },
             ], function (d) {
             }, {
                 "fnDrawCallback": function (setting) {
                     editEvent();
                     deleteEvent();
+                    imageEvent();
                 }
             });
 
@@ -433,6 +453,7 @@
             $('#modalEdit').on('hidden.bs.modal', function (e) {
                 clear();
             })
+
         });
     </script>
 @endsection

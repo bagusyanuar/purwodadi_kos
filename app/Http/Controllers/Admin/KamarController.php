@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Helper\CustomController;
+use App\Models\FasilitasKamar;
 use App\Models\FasilitasUmum;
+use App\Models\Kamar;
 use App\Models\Kos;
 use App\Models\PemilikKos;
 use App\Models\Peraturan;
 use App\Models\Wilayah;
 use Illuminate\Support\Facades\DB;
 
-class KosController extends CustomController
+class KamarController extends CustomController
 {
     public function __construct()
     {
@@ -26,15 +28,12 @@ class KosController extends CustomController
             try {
                 $data_request = [
                     'nama' => $this->postField('nama'),
-                    'pemilik_kos_id' => $this->postField('pemilik_kos'),
-                    'wilayah_id'  => $this->postField('wilayah'),
-                    'embedded_map'  => $this->postField('map'),
+                    'harga'  => $this->postField('harga'),
+                    'kos_id'  => $this->postField('kos'),
                 ];
-                $fasilitas_umum = $this->postField('fasilitas_umum');
-                $peraturan = $this->postField('peraturan');
-                $kos = Kos::create($data_request);
-                $kos->fasilitas_umum()->attach($fasilitas_umum);
-                $kos->peraturan()->attach($peraturan);
+                $fasilitas_kamar = $this->postField('fasilitas_kamar');
+                $kamar = Kamar::create($data_request);
+                $kamar->fasilitas_kamar()->attach($fasilitas_kamar);
                 DB::commit();
                 return $this->jsonResponse('success', 200);
             } catch (\Exception $e) {
@@ -43,18 +42,14 @@ class KosController extends CustomController
             }
         }
         if ($this->request->ajax()) {
-            $data = Kos::with(['pemilik_kos', 'wilayah', 'peraturan', 'fasilitas_umum'])->get();
+            $data = Kamar::with(['kos', 'fasilitas_kamar'])->get();
             return $this->basicDataTables($data);
         }
-        $wilayah = Wilayah::all();
-        $pemilik_kos = PemilikKos::all();
-        $fasilitas_umum = FasilitasUmum::all();
-        $peraturan = Peraturan::all();
-        return view('admin.kos.index')->with([
-            'wilayah' => $wilayah,
-            'pemilik_kos' => $pemilik_kos,
-            'fasilitas_umum' => $fasilitas_umum,
-            'peraturan' => $peraturan
+        $kos = Kos::all();
+        $fasilitas_kamar = FasilitasKamar::all();
+        return view('admin.kamar.index')->with([
+            'kos' => $kos,
+            'fasilitas_kamar' => $fasilitas_kamar,
         ]);
     }
 
@@ -62,17 +57,14 @@ class KosController extends CustomController
     {
         DB::beginTransaction();
         try {
-            $data = Kos::find($id);
+            $data = Kamar::find($id);
             $data_request = [
                 'nama' => $this->postField('nama'),
-                'pemilik_kos_id' => $this->postField('pemilik_kos'),
-                'wilayah_id'  => $this->postField('wilayah'),
-                'embedded_map'  => $this->postField('map'),
+                'harga'  => $this->postField('harga'),
+                'kos_id'  => $this->postField('kos'),
             ];
-            $fasilitas_umum = $this->postField('fasilitas_umum');
-            $peraturan = $this->postField('peraturan');
-            $data->fasilitas_umum()->sync($fasilitas_umum);
-            $data->peraturan()->sync($peraturan);
+            $fasilitas_kamar = $this->postField('fasilitas_kamar');
+            $data->fasilitas_kamar()->sync($fasilitas_kamar);
             $data->update($data_request);
             DB::commit();
             return $this->jsonResponse('success', 200);
@@ -86,10 +78,9 @@ class KosController extends CustomController
     {
         DB::beginTransaction();
         try {
-            $kos = Kos::find($id);
-            $kos->peraturan()->detach();
-            $kos->fasilitas_umum()->detach();
-            $kos->delete();
+            $kamar = Kamar::find($id);
+            $kamar->fasilitas_kamar()->detach();
+            $kamar->delete();
             DB::commit();
             return $this->jsonResponse('success', 200);
         } catch (\Exception $e) {
@@ -98,5 +89,15 @@ class KosController extends CustomController
         }
     }
 
-
+    public function images($id)
+    {
+        try {
+            $kamar = Kamar::with(['gambar'])->find($id);
+            return $this->jsonResponse('success', 200, [
+                'data' => $kamar->gambar
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonResponse('failed', 500);
+        }
+    }
 }
