@@ -27,10 +27,40 @@ Route::group(['prefix' => 'admin'], function (){
         Route::post('/{id}/delete', [\App\Http\Controllers\Admin\PenggunaController::class, 'destroy'])->name('admin.pengguna.delete');
     });
 
+    Route::group(['prefix' => 'wilayah'], function () {
+        Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\WilayahController::class, 'index'])->name('admin.wilayah');
+        Route::post('/{id}', [\App\Http\Controllers\Admin\WilayahController::class, 'patch'])->name('admin.wilayah.update');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\WilayahController::class, 'destroy'])->name('admin.wilayah.delete');
+    });
+
     Route::group(['prefix' => 'pemilik-kos'], function () {
         Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\PemilikKosController::class, 'index'])->name('admin.pemilik-kos');
         Route::post('/{id}', [\App\Http\Controllers\Admin\PemilikKosController::class, 'patch'])->name('admin.pemilik-kos.update');
         Route::post('/{id}/delete', [\App\Http\Controllers\Admin\PemilikKosController::class, 'destroy'])->name('admin.pemilik-kos.delete');
+    });
+
+    Route::group(['prefix' => 'fasilitas-umum'], function () {
+        Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\FasilitasUmumController::class, 'index'])->name('admin.fasilitas-umum');
+        Route::post('/{id}', [\App\Http\Controllers\Admin\FasilitasUmumController::class, 'patch'])->name('admin.fasilitas-umum.update');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\FasilitasUmumController::class, 'destroy'])->name('admin.fasilitas-umum.delete');
+    });
+
+    Route::group(['prefix' => 'fasilitas-kamar'], function () {
+        Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\FasilitasKamarController::class, 'index'])->name('admin.fasilitas-kamar');
+        Route::post('/{id}', [\App\Http\Controllers\Admin\FasilitasKamarController::class, 'patch'])->name('admin.fasilitas-kamar.update');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\FasilitasKamarController::class, 'destroy'])->name('admin.fasilitas-kamar.delete');
+    });
+
+    Route::group(['prefix' => 'peraturan'], function () {
+        Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\PeraturanController::class, 'index'])->name('admin.peraturan');
+        Route::post('/{id}', [\App\Http\Controllers\Admin\PeraturanController::class, 'patch'])->name('admin.peraturan.update');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\PeraturanController::class, 'destroy'])->name('admin.peraturan.delete');
+    });
+
+    Route::group(['prefix' => 'kos'], function () {
+        Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\KosController::class, 'index'])->name('admin.kos');
+        Route::post('/{id}', [\App\Http\Controllers\Admin\KosController::class, 'patch'])->name('admin.kos.update');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\KosController::class, 'destroy'])->name('admin.kos.delete');
     });
 
 

@@ -77,19 +77,47 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.wilayah') }}"
+                       class="nav-link">
+                        <i class="fa fa-globe nav-icon" aria-hidden="true"></i>
+                        <p>Wilayah</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.pemilik-kos') }}"
                        class="nav-link">
                         <i class="fa fa-users nav-icon" aria-hidden="true"></i>
                         <p>Pemilik Kos</p>
                     </a>
                 </li>
-{{--                <li class="nav-item">--}}
-{{--                    <a href="{{ route('admin.pelanggan') }}"--}}
-{{--                       class="nav-link">--}}
-{{--                        <i class="fa fa-users nav-icon" aria-hidden="true"></i>--}}
-{{--                        <p>Pelanggan</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.fasilitas-umum') }}"
+                       class="nav-link">
+                        <i class="fa fa-cab nav-icon" aria-hidden="true"></i>
+                        <p>Fasilitas Umum</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.fasilitas-kamar') }}"
+                       class="nav-link">
+                        <i class="fa fa-bath nav-icon" aria-hidden="true"></i>
+                        <p>Fasilitas Kamar</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.peraturan') }}"
+                       class="nav-link">
+                        <i class="fa fa-bullhorn nav-icon" aria-hidden="true"></i>
+                        <p>Peraturan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.kos') }}"
+                       class="nav-link">
+                        <i class="fa fa-building nav-icon" aria-hidden="true"></i>
+                        <p>Kos</p>
+                    </a>
+                </li>
 {{--                <li class="nav-item">--}}
 {{--                    <a href="{{ route('admin.paket') }}"--}}
 {{--                       class="nav-link">--}}

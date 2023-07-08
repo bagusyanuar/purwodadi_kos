@@ -42,6 +42,7 @@ async function AjaxPost(url, param = {}, onSuccess = function () {
             onAccepted();
         }
     } catch (e) {
+        console.log(e);
         ErrorAlert('Error', e.responseText.toString());
     }
 }
