@@ -7,12 +7,15 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\CustomController;
 use App\Models\FasilitasKamar;
 use App\Models\FasilitasUmum;
+use App\Models\GambarKamar;
 use App\Models\Kamar;
 use App\Models\Kos;
 use App\Models\PemilikKos;
 use App\Models\Peraturan;
 use App\Models\Wilayah;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class KamarController extends CustomController
 {
@@ -28,8 +31,9 @@ class KamarController extends CustomController
             try {
                 $data_request = [
                     'nama' => $this->postField('nama'),
-                    'harga'  => $this->postField('harga'),
-                    'kos_id'  => $this->postField('kos'),
+                    'harga' => $this->postField('harga'),
+                    'kos_id' => $this->postField('kos'),
+                    'ukuran' => $this->postField('ukuran'),
                 ];
                 $fasilitas_kamar = $this->postField('fasilitas_kamar');
                 $kamar = Kamar::create($data_request);
@@ -60,15 +64,16 @@ class KamarController extends CustomController
             $data = Kamar::find($id);
             $data_request = [
                 'nama' => $this->postField('nama'),
-                'harga'  => $this->postField('harga'),
-                'kos_id'  => $this->postField('kos'),
+                'harga' => $this->postField('harga'),
+                'kos_id' => $this->postField('kos'),
+                'ukuran' => $this->postField('ukuran'),
             ];
             $fasilitas_kamar = $this->postField('fasilitas_kamar');
             $data->fasilitas_kamar()->sync($fasilitas_kamar);
             $data->update($data_request);
             DB::commit();
             return $this->jsonResponse('success', 200);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return $this->jsonResponse('failed ' . $e->getMessage(), 500);
         }
@@ -91,11 +96,39 @@ class KamarController extends CustomController
 
     public function images($id)
     {
+        DB::beginTransaction();
         try {
             $kamar = Kamar::with(['gambar'])->find($id);
+            if ($this->request->method() === 'POST') {
+                if ($this->request->hasFile('file')) {
+                    foreach ($this->request->file('file') as $file) {
+                        $name = $this->uuidGenerator() . '.' . $file->getClientOriginalExtension();
+                        Storage::disk('kamar')->put($name, File::get($file));
+                        $images_data = [
+                            'kamar_id' => $kamar->id,
+                            'gambar' => $name
+                        ];
+                        GambarKamar::create($images_data);
+                    }
+                    DB::commit();
+                    return $this->jsonResponse('success', 200);
+                }
+            }
+
             return $this->jsonResponse('success', 200, [
                 'data' => $kamar->gambar
             ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->jsonResponse('failed', 500);
+        }
+    }
+
+    public function dropImages($id)
+    {
+        try {
+            GambarKamar::destroy($id);
+            return $this->jsonResponse('success', 200);
         } catch (\Exception $e) {
             return $this->jsonResponse('failed', 500);
         }

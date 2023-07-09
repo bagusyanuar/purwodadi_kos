@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\Guest\HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
@@ -67,7 +65,8 @@ Route::group(['prefix' => 'admin'], function (){
         Route::match(['get', 'post'], '/', [\App\Http\Controllers\Admin\KamarController::class, 'index'])->name('admin.kamar');
         Route::post('/{id}', [\App\Http\Controllers\Admin\KamarController::class, 'patch'])->name('admin.kamar.update');
         Route::post('/{id}/delete', [\App\Http\Controllers\Admin\KamarController::class, 'destroy'])->name('admin.kamar.delete');
-        Route::get('/{id}/images', [\App\Http\Controllers\Admin\KamarController::class, 'images'])->name('admin.kamar.images');
+        Route::match(['post', 'get'],'/{id}/images', [\App\Http\Controllers\Admin\KamarController::class, 'images'])->name('admin.kamar.images');
+        Route::post('/{id}/drop-images', [\App\Http\Controllers\Admin\KamarController::class, 'dropImages'])->name('admin.kamar.drop.images');
     });
 
 

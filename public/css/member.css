@@ -1,5 +1,5 @@
 .navbar-dark-primary{
-    background-color: #03045E !important;
+    background-color: #1aae5a !important;
     height: 80px !important;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .custom-nav-item{
-    color: #a0aec0 !important;
+    color: #f7f7f7 !important;
 }
 
 .custom-nav-item:hover {

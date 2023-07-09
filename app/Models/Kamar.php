@@ -14,7 +14,8 @@ class Kamar extends Model
     protected $fillable = [
         'kos_id',
         'nama',
-        'harga'
+        'harga',
+        'ukuran',
     ];
 
     public function kos()

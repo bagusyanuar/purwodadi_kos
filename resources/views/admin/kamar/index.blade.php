@@ -75,6 +75,7 @@
                         <th>Nama Kos</th>
                         <th>Nama Kamar</th>
                         <th width="12%">Harga (Rp.)</th>
+                        <th width="12%">Ukuran (Meter)</th>
                         <th width="15%">Fasilitas Kamar</th>
                         <th width="15%" class="text-center">Action</th>
                     </tr>
@@ -97,6 +98,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group w-100 mt-1">
+                        <label for="kos">Kos</label>
+                        <select class="select2" name="kos" id="kos" style="width: 100%;">
+                            <option value="">--Pilih Kos--</option>
+                            @foreach($kos as $v)
+                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="w-100 mb-1">
                         <label for="nama" class="form-label">Nama</label>
                         <input type="text" class="form-control" id="nama" placeholder="Nama"
@@ -107,14 +117,10 @@
                         <input type="number" class="form-control" id="harga" placeholder="Harga"
                                name="harga">
                     </div>
-                    <div class="form-group w-100 mt-1">
-                        <label for="kos">Kos</label>
-                        <select class="select2" name="kos" id="kos" style="width: 100%;">
-                            <option value="">--Pilih Kos--</option>
-                            @foreach($kos as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
+                    <div class="w-100 mb-1">
+                        <label for="ukuran" class="form-label">Ukuran</label>
+                        <input type="text" class="form-control" id="ukuran" placeholder="Ukuran"
+                               name="ukuran">
                     </div>
                     <div class="form-group w-100">
                         <label for="fasilitas_kamar">Fasilitas Kamar</label>
@@ -147,6 +153,15 @@
                 </div>
                 <input type="hidden" id="id" name="id" value="">
                 <div class="modal-body">
+                    <div class="form-group w-100 mt-1">
+                        <label for="kos-edit">Kos</label>
+                        <select class="select2" name="kos-edit" id="kos-edit" style="width: 100%;">
+                            <option value="">--Pilih Kos--</option>
+                            @foreach($kos as $v)
+                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="w-100 mb-1">
                         <label for="nama-edit" class="form-label">Nama</label>
                         <input type="text" class="form-control" id="nama-edit" placeholder="Nama"
@@ -157,14 +172,10 @@
                         <input type="number" class="form-control" id="harga-edit" placeholder="Harga"
                                name="harga-edit">
                     </div>
-                    <div class="form-group w-100 mt-1">
-                        <label for="kos-edit">Kos</label>
-                        <select class="select2" name="kos-edit" id="kos-edit" style="width: 100%;">
-                            <option value="">--Pilih Kos--</option>
-                            @foreach($kos as $v)
-                                <option value="{{ $v->id }}">{{ $v->nama }}</option>
-                            @endforeach
-                        </select>
+                    <div class="w-100 mb-1">
+                        <label for="ukuran-edit" class="form-label">Ukuran</label>
+                        <input type="text" class="form-control" id="ukuran-edit" placeholder="Ukuran"
+                               name="ukuran-edit">
                     </div>
                     <div class="form-group w-100">
                         <label for="fasilitas_kamar-edit">Fasilitas Kamar</label>
@@ -199,10 +210,8 @@
                     @csrf
                     <input type="hidden" id="id-image" name="id" value="">
                     <div class="modal-body">
-                        <div id="panel-images">
-                            <div style="min-height: 200px;" class="d-flex justify-content-center align-items-center">
-                                <p class="font-weight-bold">Gambar Tidak Tersedia</p>
-                            </div>
+                        <div id="panel-images" class="row mb-3">
+
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -237,10 +246,12 @@
 
         function clear() {
             $('#nama').val('');
+            $('#ukuran').val('');
             $('#kos').select2().val('').trigger('change');
             $('#fasilitas_kamar').select2().val('').trigger('change');
             $('#harga').val('');
             $('#nama-edit').val('');
+            $('#ukuran-edit').val('');
             $('#kos-edit').select2().val('').trigger('change');
             $('#fasilitas_kamar-edit').select2().val('').trigger('change');
             $('#harga-edit').val('');
@@ -251,6 +262,7 @@
             let url = '{{ route('admin.kamar') }}';
             let data = {
                 nama: $('#nama').val(),
+                ukuran: $('#ukuran').val(),
                 kos: $('#kos').val(),
                 harga: $('#harga').val(),
                 fasilitas_kamar: $('#fasilitas_kamar').val(),
@@ -267,6 +279,7 @@
             let url = '{{ route('admin.kamar') }}' + '/' + id;
             let data = {
                 nama: $('#nama-edit').val(),
+                ukuran: $('#ukuran-edit').val(),
                 kos: $('#kos-edit').val(),
                 harga: $('#harga-edit').val(),
                 fasilitas_kamar: $('#fasilitas_kamar-edit').val(),
@@ -297,10 +310,12 @@
                 e.preventDefault();
                 let id = this.dataset.id;
                 let nama = this.dataset.nama;
+                let ukuran = this.dataset.ukuran;
                 let harga = this.dataset.harga;
                 let kos = this.dataset.kos;
                 let fasilitas = JSON.parse(this.dataset.fasilitas);
                 $('#nama-edit').val(nama);
+                $('#ukuran-edit').val(ukuran);
                 $('#harga-edit').val(harga);
                 $('#kos-edit').select2().val(kos).trigger('change');
                 $('#fasilitas_kamar-edit').select2().val(fasilitas).trigger('change');
@@ -337,22 +352,63 @@
                 e.preventDefault();
                 let id = this.dataset.id;
                 $('#id-image').val(id);
+                $('#file').val('');
                 let url = '{{ route('admin.kamar') }}' + '/' + id + '/images';
                 let response = await $.get(url);
-                console.log(response);
+                let el = $('#panel-images');
+                el.empty();
+                let newChild = createElImages(response['payload']['data']);
+                el.append(newChild);
+                dropImageEvent();
                 $('#modalImages').modal('show');
             })
         }
 
+        function createElImages(data) {
+            let el = '';
+            if (data.length > 0) {
+                $.each(data, function (k, v) {
+                    el += '<div class="col-3">' +
+                        '<div class="flex flex-column align-items-center">' +
+                        '<img src="/assets/kamar/' + v['gambar'] + '" alt="gbr-kmar" class="w-100">' +
+                        '<a href="#" class="btn-delete-image" data-id="' + v['id'] + '">Hapus</a>' +
+                        '</div>' +
+                        '</div>';
+                });
+                return el;
+            }
+            return '<div class="col-12">' +
+                '<div style="min-height: 200px;" class="d-flex justify-content-center align-items-center">\n' +
+                '<p class="font-weight-bold">Gambar Tidak Tersedia</p>\n' +
+                '</div>' +
+                '</div>'
+        }
 
+        function dropImages(id) {
+            let url = '{{ route('admin.kamar') }}' + '/' + id + '/drop-images';
+            AjaxPost(url, {}, function () {
+                $('#modalImages').modal('hide');
+                SuccessAlert('Berhasil!', 'Berhasil menghapus gambar...');
+            });
+        }
+
+        function dropImageEvent() {
+            $('.btn-delete-image').on('click', async function (e) {
+                e.preventDefault();
+                let id = this.dataset.id;
+                dropImages(id);
+            })
+        }
         $(document).ready(function () {
             $('.select2').select2({
                 width: 'resolve'
             });
 
-            $(".custom-file-input").on("change", function() {
+            $(".custom-file-input").on("change", function () {
                 var files = Array.from(this.files)
-                var fileName = files.map(f =>{return f.name}).join(", ")
+                var fileName = files.map(f => {
+                    return f.name
+                }).join(", ")
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
             });
             let url = '{{ route('admin.kamar') }}';
@@ -365,6 +421,7 @@
                         return data.toLocaleString('id-ID');
                     }
                 },
+                {data: 'ukuran'},
                 {
                     data: 'fasilitas_kamar', render: function (data) {
                         let value = '';
@@ -388,6 +445,7 @@
                         return '<a href="#" class="btn btn-sm btn-warning btn-edit mr-1" ' +
                             'data-id="' + data['id'] + '" ' +
                             'data-nama="' + data['nama'] + '" ' +
+                            'data-ukuran="' + data['ukuran'] + '" ' +
                             'data-harga="' + data['harga'] + '" ' +
                             'data-fasilitas="' + stringFasilitasKamar + '"' +
                             'data-kos="' + data['kos']['id'] + '"' +
@@ -454,6 +512,29 @@
                 clear();
             })
 
+            $('#btn-upload').on('click', function () {
+                let id = $('#id-image').val();
+                let frm = $('#form-input')[0];
+                let f_data = new FormData(frm);
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: '{{ route('admin.kamar') }}/' + id + '/images',
+                    data: f_data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        $('.custom-file-label').html('');
+                        $('#modalImages').modal('hide');
+                        SuccessAlert('Berhasil', 'Berhasil Menambahkan Gambar...');
+                    },
+                    error: function (e) {
+                        ErrorAlert('Error', 'Terjadi Kesalahan Server....')
+                    }
+                })
+            });
         });
     </script>
 @endsection
