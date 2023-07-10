@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\Guest\HomeController::class, 'index'])->name('home');
+Route::get('/pencarian', [\App\Http\Controllers\Guest\PencarianController::class, 'index'])->name('pencarian');
 
 Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 

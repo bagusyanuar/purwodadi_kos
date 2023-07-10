@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sistem Informasi Laundry</title>
+    <title>Sistem Informasi Purwodadi Kos</title>
     <meta name="csrf-token" content="{{csrf_token()}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
     @yield('css')
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark-primary">
     <a class="navbar-brand" href="#">
         <img src="{{ asset('assets/logo.png') }}" alt="logo" height="50" class="mr-2">
         <span class="custom-nav-item">Purwodadi Kos</span>
@@ -54,13 +54,20 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link custom-nav-item" href="{{ route('home')  }}#paket">Paket</a>
+                    <a class="nav-link custom-nav-item" href="{{ route('pencarian')  }}">Cari Kos</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 @yield('content')
+<section id="footer" class="footer d-flex justify-content-center align-items-center p-5">
+    <div class="text-center">
+        <img src="{{ asset('/assets/logo.png') }}" height="150" alt="logo footer">
+        <p style="color: whitesmoke" class="mb-0">Sistem Informasi Purwodadi Kos</p>
+        <p style="color: whitesmoke; font-size: 12px;">Copyright 2023</p>
+    </div>
+</section>
 <script src="{{ asset('/jQuery/jquery-3.4.1.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
