@@ -1,6 +1,31 @@
 @extends('guest.layout')
 
 @section('css')
+    <style>
+        .title-kos {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 16px;
+            color: #777777;
+        }
+
+        .fasilitas-kos {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            color: #777777;
+        }
+
+        .harga-kos {
+            height: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -78,6 +103,7 @@
                 el.empty();
                 el.append(createLoader('Sedang mengunduh data..', 300));
                 let response = await $.get(url);
+                el.empty();
                 let data = response['payload'];
                 if (data.length > 0) {
                     $.each(data, function (k, v) {
@@ -86,26 +112,40 @@
                 } else {
                     el.append(createElEmpty());
                 }
+
+                $('.card-paket').on('click', function () {
+                    let id = this.dataset.id;
+                    let kosId = this.dataset.kos;
+                    window.location.href = '/kos/' + kosId + '/kamar/' + id;
+                });
                 console.log(response);
             } catch (e) {
-                console.log(e)
+                console.log(e);
+                alert('terjadi kesalahan server...')
             }
         }
 
         function createElProduct(v) {
             let fasilitas = '';
+
+            let urlGambar = '/assets/hero.png';
+            if (v['gambar'].length > 0) {
+                urlGambar = v['gambar'][0]['gambar'];
+            }
             $.each(v['fasilitas_kamar'], function (k, vF) {
-                fasilitas += vF + ' . ';
+                fasilitas += vF['nama'] + ' . ';
             });
             return '<div class="col-3">' +
-                '<div class="card-paket shadow-lg d-flex flex-column align-items-start" data-id="">' +
+                '<div class="card-paket shadow-lg d-flex flex-column align-items-start" data-id="'+v['id']+'" data-kos="'+v['kos_id']+'">' +
                 '<div class="flex-grow-1 w-100">' +
-                '<img src="/assets/hero.png" height="200" class="w-100" alt="gmb" style="object-fit: cover; border-radius: 5px;"/>' +
-                '<p class="mt-2 title-kos w-100 mb-0">'+v['']+'</p>' +
-                '<p class="wilayah-kos w-100 font-weight-bold mb-0"></p>' +
-                '<p class="fasilitas-kos w-100"></p>' +
+                '<img src="' + urlGambar + '" height="200" class="w-100" alt="gmb" style="object-fit: cover; border-radius: 5px;"/>' +
+                '<p class="mt-2 title-kos w-100 mb-0">' + v['nama'] + '</p>' +
+                '<p class="wilayah-kos w-100 font-weight-bold mb-0">' + v['kos']['wilayah']['nama'] + '</p>' +
+                '<p class="fasilitas-kos w-100">' + fasilitas + '</p>' +
                 '</div>' +
-                '<div></div>' +
+                '<div class="harga-kos">' +
+                '<span>Rp. ' + v['harga'].toLocaleString('id-ID') + '<span style="font-size: 16px; font-weight: normal; color: #777777;">/bulan</span></span>' +
+                '</div>' +
                 '</div>' +
                 '</div>';
         }
@@ -117,6 +157,7 @@
         }
 
         $(document).ready(function () {
+            search();
             $('#btn-search').on('click', function () {
                 search();
             });

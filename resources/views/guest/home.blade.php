@@ -48,10 +48,17 @@
         <div class="row justify-content-center w-100">
             @forelse($kamar as $k)
                 <div class="col-3">
-                    <div class="card-paket shadow-lg d-flex flex-column align-items-start" data-id="{{ $k->id }}">
+                    <div class="card-paket shadow-lg d-flex flex-column align-items-start" data-id="{{ $k->id }}"
+                         data-kamar="{{ $k->kos_id }}">
                         <div class="flex-grow-1 w-100">
-                            <img src="{{ asset('/assets/hero.png') }}" height="200" class="w-100" alt="gmb"
-                                 style="object-fit: cover; border-radius: 5px;"/>
+                            @if(count($k->gambar) > 0)
+                                <img src="{{ asset('/assets/kamar').'/'.$k->gambar[0]->gambar }}" height="200"
+                                     class="w-100" alt="gmb"
+                                     style="object-fit: cover; border-radius: 5px;"/>
+                            @else
+                                <img src="{{ asset('/assets/hero.png') }}" height="200" class="w-100" alt="gmb"
+                                     style="object-fit: cover; border-radius: 5px;"/>
+                            @endif
                             <p class="mt-2 title-kos w-100 mb-0">{{ $k->kos->nama . ' ' .$k->nama }}</p>
                             <p class="wilayah-kos w-100 font-weight-bold mb-0">{{ $k->kos->wilayah->nama }}</p>
                             <p class="fasilitas-kos w-100">
@@ -80,7 +87,8 @@
         $(document).ready(function () {
             $('.card-paket').on('click', function () {
                 let id = this.dataset.id;
-                window.location.href = '/kos/' + id;
+                let kosId = this.dataset.kos;
+                window.location.href = '/kos/' + kosId + '/kamar/' + id;
             });
         })
     </script>
