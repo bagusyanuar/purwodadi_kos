@@ -54,7 +54,7 @@
         <hr>
         <div class="mt-2">
             <p class="font-weight-bold">Hasil Pencarian</p>
-            <div class="row" id="panel-pencarian">
+            <div class="row justify-content-center" id="panel-pencarian">
                 <div class="col-12 d-flex align-items-center justify-content-center" style="height: 300px;">Hasil Tidak
                     DiTemukan....
                 </div>
@@ -69,16 +69,51 @@
         var path = '{{ request()->path() }}';
 
         async function search() {
+            let el = $('#panel-pencarian');
             let param = $('#cari').val();
             let wilayah = $('#wilayah').val();
             let sort = $('#harga').val();
             let url = path + '?p=' + param + '&wilayah=' + wilayah + '&sort=' + sort;
             try {
+                el.empty();
+                el.append(createLoader('Sedang mengunduh data..', 300));
                 let response = await $.get(url);
+                let data = response['payload'];
+                if (data.length > 0) {
+                    $.each(data, function (k, v) {
+                        el.append(createElProduct(v));
+                    });
+                } else {
+                    el.append(createElEmpty());
+                }
                 console.log(response);
             } catch (e) {
                 console.log(e)
             }
+        }
+
+        function createElProduct(v) {
+            let fasilitas = '';
+            $.each(v['fasilitas_kamar'], function (k, vF) {
+                fasilitas += vF + ' . ';
+            });
+            return '<div class="col-3">' +
+                '<div class="card-paket shadow-lg d-flex flex-column align-items-start" data-id="">' +
+                '<div class="flex-grow-1 w-100">' +
+                '<img src="/assets/hero.png" height="200" class="w-100" alt="gmb" style="object-fit: cover; border-radius: 5px;"/>' +
+                '<p class="mt-2 title-kos w-100 mb-0">'+v['']+'</p>' +
+                '<p class="wilayah-kos w-100 font-weight-bold mb-0"></p>' +
+                '<p class="fasilitas-kos w-100"></p>' +
+                '</div>' +
+                '<div></div>' +
+                '</div>' +
+                '</div>';
+        }
+
+        function createElEmpty() {
+            return '<div class="col-12 d-flex align-items-center justify-content-center" style="height: 300px;">Hasil Tidak\n' +
+                'DiTemukan....\n' +
+                '</div>';
         }
 
         $(document).ready(function () {
