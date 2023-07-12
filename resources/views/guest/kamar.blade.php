@@ -33,7 +33,7 @@
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb" style="background-color: transparent !important; padding-left: 0 !important;">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ $data->kos->nama }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('kos', ['kos' => $data->kos_id]) }}">{{ $data->kos->nama }}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $data->nama }}</li>
             </ol>
         </nav>
@@ -121,7 +121,7 @@
                     <hr>
                     <p class="font-weight-bold mt-3">Lokasi</p>
                     <div class="w-100 mt-3">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3954.970823882502!2d110.8066251!3d-7.5781547!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a16783dbd32eb%3A0xe852ba0aa1842158!2sUniversitas%20Duta%20Bangsa%20(Kampus%201%20Bhayangkara)!5e0!3m2!1sid!2sid!4v1689089029532!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        {{ $data->kos->embedded_map }}
                     </div>
                 </div>
                 <div class="col-4">
@@ -132,7 +132,7 @@
                                     style="font-size: 16px; font-weight: normal">/bulan</span>
                             </p>
                             <hr>
-                            <a class="btn btn-lg btn-success w-100 d-flex align-items-center justify-content-center"
+                            <a href="https://wa.me/62{{ $data->kos->pemilik_kos->no_hp }}?text=Halo, saya ingin menanyakan info tentang kos {{ $data->kos->nama }} kamar {{ $data->nama }}" target="_blank" class="btn btn-lg btn-success w-100 d-flex align-items-center justify-content-center"
                                style="color: whitesmoke"><i class="fa fa-comment mr-2"></i>Tanya Pemilik</a>
                         </div>
                     </div>

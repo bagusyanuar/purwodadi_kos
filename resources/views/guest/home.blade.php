@@ -49,7 +49,7 @@
             @forelse($kamar as $k)
                 <div class="col-3">
                     <div class="card-paket shadow-lg d-flex flex-column align-items-start" data-id="{{ $k->id }}"
-                         data-kamar="{{ $k->kos_id }}">
+                         data-kos="{{ $k->kos_id }}">
                         <div class="flex-grow-1 w-100">
                             @if(count($k->gambar) > 0)
                                 <img src="{{ asset('/assets/kamar').'/'.$k->gambar[0]->gambar }}" height="200"
