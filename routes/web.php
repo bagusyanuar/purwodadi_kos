@@ -18,7 +18,9 @@ Route::get('/pencarian', [\App\Http\Controllers\Guest\PencarianController::class
 Route::get('/kos/{kos}', [\App\Http\Controllers\Guest\KosController::class, 'index'])->name('kos');
 Route::get('/kos/{kos}/kamar/{id}', [\App\Http\Controllers\Guest\KamarController::class, 'index'])->name('kamar');
 
+Route::match(['post', 'get'],'/login-admin', [\App\Http\Controllers\Admin\AuthController::class, 'login'])->name('admin.login');
 Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/logout-admin', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
 
 Route::group(['prefix' => 'admin'], function (){
 
